@@ -1,6 +1,16 @@
 <?php
 // показывать или нет выполненные задачи
 $show_complete_tasks = rand(0, 1);
+// Добавляю простой массив
+$project_array=array("Все","Входящие","Учеба","Работа","Домашние дела","Авто");
+
+// Добавляю двумерных ассоциативный массив
+$array_tasks["task_1"]=array("task"=>"Собеседование в IT компании","date"=>"01.06.2018","category"=>"Работа","complete"=>"Нет");
+$array_tasks["task_2"]=array("task"=>"Выполнить тестовое задание","date"=>"25.05.2018","category"=>"Работа","complete"=>"Нет");
+$array_tasks["task_3"]=array("task"=>"Сделать задание первого раздела","date"=>"21.04.2018","category"=>"Работа","complete"=>"Нет");
+$array_tasks["task_4"]=array("task"=>"Встреча с другом","date"=>"22.04.2018","category"=>"Учеба","complete"=>"Да");
+$array_tasks["task_5"]=array("task"=>"Купить корм для кота","date"=>"нет","category"=>"Входящие","complete"=>"Нет");
+$array_tasks["task_6"]=array("task"=>"Заказать пиццу","date"=>"нет","category"=>"Домашние дела","complete"=>"Нет");
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -47,11 +57,12 @@ $show_complete_tasks = rand(0, 1);
 
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
-                        <li class="main-navigation__list-item">
-                            <a class="main-navigation__list-item-link" href="#">Входящие</a>
+                        <?php foreach ($project_array as $key=>$value ): ?>
+                        <li class="main-navigation__list-item <?php if ($key==0): echo("main-navigation__list-item--active"); endif;?>">
+                            <a class="main-navigation__list-item-link" href="#"><?php echo($project_array[$key])?> </a>
                             <span class="main-navigation__list-item-count">24</span>
                         </li>
-
+                        <!-- непонятно куда девать счётчик проектов (везде одинаково числов получается)? Его тоже может в массив занести, хотя по условию задачи не нужно.
                         <li class="main-navigation__list-item main-navigation__list-item--active">
                             <a class="main-navigation__list-item-link" href="#">Работа</a>
                             <span class="main-navigation__list-item-count">12</span>
@@ -70,7 +81,8 @@ $show_complete_tasks = rand(0, 1);
                         <li class="main-navigation__list-item">
                             <a class="main-navigation__list-item-link" href="#">Авто</a>
                             <span class="main-navigation__list-item-count">0</span>
-                        </li>
+                        </li> -->
+                        <?php endforeach;?>
                     </ul>
                 </nav>
 

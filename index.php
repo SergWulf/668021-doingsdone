@@ -1,16 +1,49 @@
 <?php
 // показывать или нет выполненные задачи
 $show_complete_tasks = rand(0, 1);
+
 // Добавляю простой массив
 $project_array=array("Все","Входящие","Учеба","Работа","Домашние дела","Авто");
 
 // Добавляю двумерных ассоциативный массив
-$array_tasks["task_1"]=array("task"=>"Собеседование в IT компании","date"=>"01.06.2018","category"=>"Работа","complete"=>"Нет");
-$array_tasks["task_2"]=array("task"=>"Выполнить тестовое задание","date"=>"25.05.2018","category"=>"Работа","complete"=>"Нет");
-$array_tasks["task_3"]=array("task"=>"Сделать задание первого раздела","date"=>"21.04.2018","category"=>"Работа","complete"=>"Нет");
-$array_tasks["task_4"]=array("task"=>"Встреча с другом","date"=>"22.04.2018","category"=>"Учеба","complete"=>"Да");
-$array_tasks["task_5"]=array("task"=>"Купить корм для кота","date"=>"нет","category"=>"Входящие","complete"=>"Нет");
-$array_tasks["task_6"]=array("task"=>"Заказать пиццу","date"=>"нет","category"=>"Домашние дела","complete"=>"Нет");
+$array_tasks = [
+  'task1' => [
+    'task' => 'Собеседование в IT компании',
+    'date' => '01.06.2018',
+    'category' => 'Работа',
+    'complete' => 'Нет'
+  ],
+  'task2' => [
+    'task' => 'Выполнить тестовое задание',
+    'date' => '25.05.2018',
+    'category' => 'Работа',
+    'complete' => 'Нет'
+  ],
+    'task3' => [
+    'task' => 'Сделать задание первого раздела',
+    'date' => '21.04.2018',
+    'category' => 'Работа',
+    'complete' => 'Нет'
+  ],
+    'task4' => [
+    'task' => 'Встреча с другом',
+    'date' => '22.04.2018',
+    'category' => 'Учеба',
+    'complete' => 'Да'
+  ],
+    'task5' => [
+    'task' => 'Купить корм для кота',
+    'date' => 'нет',
+    'category' => 'Входящие',
+    'complete' => 'Нет'
+  ],
+    'task6' => [
+    'task' => 'Заказать пиццу',
+    'date' => 'нет',
+    'category' => 'Домашние дела',
+    'complete' => 'Нет'
+  ]
+];
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -57,31 +90,11 @@ $array_tasks["task_6"]=array("task"=>"Заказать пиццу","date"=>"не
 
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
-                        <?php foreach ($project_array as $key=>$value ): ?>
+                        <?php foreach ($project_array as $key=>$project_name): ?>
                         <li class="main-navigation__list-item <?php if ($key==0): echo("main-navigation__list-item--active"); endif;?>">
-                            <a class="main-navigation__list-item-link" href="#"><?php echo($project_array[$key])?> </a>
+                            <a class="main-navigation__list-item-link" href="#"><?=($project_array[$key]);?> </a>
                             <span class="main-navigation__list-item-count">24</span>
                         </li>
-                        <!-- непонятно куда девать счётчик проектов (везде одинаково числов получается)? Его тоже может в массив занести, хотя по условию задачи не нужно.
-                        <li class="main-navigation__list-item main-navigation__list-item--active">
-                            <a class="main-navigation__list-item-link" href="#">Работа</a>
-                            <span class="main-navigation__list-item-count">12</span>
-                        </li>
-
-                        <li class="main-navigation__list-item">
-                            <a class="main-navigation__list-item-link" href="#">Здоровье</a>
-                            <span class="main-navigation__list-item-count">3</span>
-                        </li>
-
-                        <li class="main-navigation__list-item">
-                            <a class="main-navigation__list-item-link" href="#">Домашние дела</a>
-                            <span class="main-navigation__list-item-count">7</span>
-                        </li>
-
-                        <li class="main-navigation__list-item">
-                            <a class="main-navigation__list-item-link" href="#">Авто</a>
-                            <span class="main-navigation__list-item-count">0</span>
-                        </li> -->
                         <?php endforeach;?>
                     </ul>
                 </nav>
@@ -115,16 +128,16 @@ $array_tasks["task_6"]=array("task"=>"Заказать пиццу","date"=>"не
                 </div>
 
                 <table class="tasks">
-                    <?php foreach ($array_tasks as $task=>$array): ?>
-                    <tr class="tasks__item task  <?php if ($array_tasks[$task]['complete']=="Да"): echo("task--completed"); endif;?>">
+                    <?php foreach ($array_tasks as $description_task=>$attributes_of_task): ?>
+                    <tr class="tasks__item task  <?php if ($array_tasks[$description_task]['complete']=="Да"): echo("task--completed"); endif;?>">
                         <td class="task__select">
                             <label class="checkbox task__checkbox">
                                 <input class="checkbox__input visually-hidden task__checkbox" type="checkbox">
-                                <span class="checkbox__text"><?php echo($array_tasks[$task]['task']); ?></span>
+                                <span class="checkbox__text"><?=($array_tasks[$description_task]['task']); ?></span>
                             </label>
                         </td>
-                        <td class="task__date"><?php echo($array_tasks[$task]['date']); ?></td>
-                        <td class="task__category"><?php echo($array_tasks[$task]['category']); ?></td>
+                        <td class="task__date"><?=($array_tasks[$description_task]['date']); ?></td>
+                        <td class="task__category"><?=($array_tasks[$description_task]['category']); ?></td>
                     </tr>
                     <?php endforeach; ?>
                 </table>

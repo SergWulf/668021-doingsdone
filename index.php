@@ -44,6 +44,23 @@ $array_tasks = [
     'complete' => 'Нет'
   ]
 ];
+
+// Добавляем функцию подсчета количества проектов
+function count_project($list_tasks, $name_task)
+{
+    $current_count_project=0;
+    if ($name_task == 'Все') {
+        $current_count_project = count($list_tasks);
+    }
+    else {
+        foreach ($list_tasks as $description_task => $attributes_of_task) {
+            if ($name_task == $list_tasks[$description_task]['category']) {
+                $current_count_project++;
+            }
+        }
+    }
+    return $current_count_project;
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -93,7 +110,7 @@ $array_tasks = [
                         <?php foreach ($project_array as $key => $project_name): ?>
                         <li class="main-navigation__list-item <?php if ($key == 0): echo("main-navigation__list-item--active"); endif;?>">
                             <a class="main-navigation__list-item-link" href="#"><?=($project_array[$key]);?> </a>
-                            <span class="main-navigation__list-item-count">24</span>
+                            <span class="main-navigation__list-item-count"><?=count_project($array_tasks, $project_array[$key]);?> </span>
                         </li>
                         <?php endforeach;?>
                     </ul>

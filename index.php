@@ -90,8 +90,8 @@ $array_tasks = [
 
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
-                        <?php foreach ($project_array as $key=>$project_name): ?>
-                        <li class="main-navigation__list-item <?php if ($key==0): echo("main-navigation__list-item--active"); endif;?>">
+                        <?php foreach ($project_array as $key => $project_name): ?>
+                        <li class="main-navigation__list-item <?php if ($key == 0): echo("main-navigation__list-item--active"); endif;?>">
                             <a class="main-navigation__list-item-link" href="#"><?=($project_array[$key]);?> </a>
                             <span class="main-navigation__list-item-count">24</span>
                         </li>
@@ -122,13 +122,13 @@ $array_tasks = [
 
                     <label class="checkbox">
                         <!--добавить сюда аттрибут "checked", если переменная $show_complete_tasks равна единице-->
-                        <input class="checkbox__input visually-hidden show_completed" type="checkbox" <?php if($show_complete_tasks==1) {echo "checked";} ?>>
+                        <input class="checkbox__input visually-hidden show_completed" type="checkbox" <?php if ($show_complete_tasks == 1) {echo "checked";} ?>>
                         <span class="checkbox__text">Показывать выполненные</span>
                     </label>
                 </div>
 
                 <table class="tasks">
-                    <?php foreach ($array_tasks as $description_task=>$attributes_of_task): ?>
+                    <?php foreach ($array_tasks as $description_task => $attributes_of_task): ?>
                     <tr class="tasks__item task  <?php if ($array_tasks[$description_task]['complete']=="Да"): echo("task--completed"); endif;?>">
                         <td class="task__select">
                             <label class="checkbox task__checkbox">

@@ -1,66 +1,3 @@
-<?php
-// показывать или нет выполненные задачи
-$show_complete_tasks = rand(0, 1);
-
-// Добавляю простой массив
-$project_array=array("Все","Входящие","Учеба","Работа","Домашние дела","Авто");
-
-// Добавляю двумерных ассоциативный массив
-$array_tasks = [
-    'task1' => [
-        'task' => 'Собеседование в IT компании',
-        'date' => '01.06.2018',
-        'category' => 'Работа',
-        'complete' => 'Нет'
-    ],
-    'task2' => [
-        'task' => 'Выполнить тестовое задание',
-        'date' => '25.05.2018',
-        'category' => 'Работа',
-        'complete' => 'Нет'
-    ],
-    'task3' => [
-        'task' => 'Сделать задание первого раздела',
-        'date' => '21.04.2018',
-        'category' => 'Работа',
-        'complete' => 'Нет'
-    ],
-    'task4' => [
-        'task' => 'Встреча с другом',
-        'date' => '22.04.2018',
-        'category' => 'Учеба',
-        'complete' => 'Да'
-    ],
-    'task5' => [
-        'task' => 'Купить корм для кота',
-        'date' => 'нет',
-        'category' => 'Входящие',
-        'complete' => 'Нет'
-    ],
-    'task6' => [
-        'task' => 'Заказать пиццу',
-        'date' => 'нет',
-        'category' => 'Домашние дела',
-        'complete' => 'Нет'
-    ]
-];
-
-// Добавляем функцию подсчета количества проектов
-function count_project($list_tasks, $name_task)
-{
-    $current_count_project=0;
-    if ($name_task == 'Все') {
-        return count($list_tasks);
-    }
-
-    foreach ($list_tasks as $description_task => $attributes_of_task) {
-        if ($name_task == $attributes_of_task['category']) {
-            $current_count_project++;
-        }
-    }
-    return $current_count_project;
-}
-?>
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -121,7 +58,7 @@ function count_project($list_tasks, $name_task)
 
             <!-- Вывод переменной, в которой будет контекст страницы -->
             <main class="content__main">
-            <?=$main;?>
+            <?=$content;?>
             </main>
         </div>
     </div>

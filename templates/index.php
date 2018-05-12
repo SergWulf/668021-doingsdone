@@ -27,11 +27,11 @@
             <td class="task__select">
                 <label class="checkbox task__checkbox">
                     <input class="checkbox__input visually-hidden task__checkbox" type="checkbox">
-                    <span class="checkbox__text"><?=($array_tasks[$index]['task']); ?></span>
+                    <span class="checkbox__text"><?=strip_tags(($array_tasks[$index]['task'])); ?></span>
                 </label>
             </td>
             <td class="task__file"></td>
-            <td class="task__date"><?=($array_tasks[$index]['date']); ?></td>
+            <td class="task__date"><?=strip_tags(($array_tasks[$index]['date'])); ?></td>
         </tr>
     <?php endforeach; ?>
 </table>

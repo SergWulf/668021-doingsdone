@@ -3,7 +3,7 @@
 // Функция подсчета количества проектов
 function count_project($list_tasks, $name_task)
 {
-    $current_count_project=0;
+    $current_count_project = 0;
     if ($name_task == 'Все') {
         return count($list_tasks);
     }
@@ -26,7 +26,7 @@ function include_template($template, $vars_array)
     extract($vars_array);
     ob_start();
     require_once($template);
-    $content=ob_get_clean();
+    $content = ob_get_clean();
     return $content;
 }
 

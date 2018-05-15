@@ -30,21 +30,22 @@ function include_template($template, $vars_array)
     return $content;
 }
 
-// Функция сигнализирует о том, что на время выполнения задачи осталось меньше 24 часов
+/**
+ * Функция сигнализирует о том, что на время выполнения задачи осталось меньше 24 часов
+ */
 
-function task_important($task_time)
+function task_important($task)
 {
-    // Переменная хранящая текущую UNIX метку времени
     $cur_time = time();
-
+    $task_time = strtotime($task['date']);
     //Переменная хранящая разницу в часах между текущим временем и датой выполнения задачи
     $diff_time_hours = floor(($task_time - $cur_time) / 3600);
 
     if ($diff_time_hours <= 24)
     {
-        return 'task--important';
+        return TRUE;
     }
-    return '';
+    return FALSE;
 }
 
 ?>

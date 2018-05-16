@@ -23,7 +23,7 @@
 
 <table class="tasks">
     <?php foreach ($array_tasks as $index => $attributes_of_task): ?>
-        <tr class="tasks__item task  <?php if ($array_tasks[$index]['complete']=="Да"): echo("task--completed"); endif;?>">
+        <tr class="tasks__item task  <?php if ($array_tasks[$index]['complete'] == "Да"): echo('task--completed '); endif; echo task_important($array_tasks[$index]) ? 'task--important' : ''; ?>">
             <td class="task__select">
                 <label class="checkbox task__checkbox">
                     <input class="checkbox__input visually-hidden task__checkbox" type="checkbox">

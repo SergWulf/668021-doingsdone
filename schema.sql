@@ -4,12 +4,6 @@ DEFAULT COLLATE utf8_general_ci;
 
 USE doingsdone;
 
-CREATE TABLE projects (
-id INT(11) AUTO_INCREMENT PRIMARY KEY,
-user_id INT(11),
-name_project CHAR(124)
-);
-
 CREATE TABLE users (
 id INT(11) AUTO_INCREMENT PRIMARY KEY,
 name_user CHAR(64),
@@ -17,6 +11,13 @@ email_user CHAR(254),
 password_user CHAR(254),
 reg_date_user CHAR(64),
 contact_user CHAR(254)
+);
+
+CREATE TABLE projects (
+id INT(11) AUTO_INCREMENT PRIMARY KEY,
+user_id INT(11),
+name_project CHAR(124),
+FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE tasks (
@@ -32,9 +33,6 @@ status BOOLEAN,
 FOREIGN KEY (user_id) REFERENCES users(id),
 FOREIGN KEY (project_id) REFERENCES projects(id)
 );
-
-
-
 
 CREATE FULLTEXT INDEX name_task_index ON tasks(name_task);
 CREATE INDEX limit_date_and_status_index ON tasks(limit_date_task,status);

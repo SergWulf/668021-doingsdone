@@ -45,8 +45,8 @@
                     <ul class="main-navigation__list">
                         <?php foreach ($project_array as $key => $project_name): ?>
                             <li class="main-navigation__list-item <?php if ($key == 0): echo("main-navigation__list-item--active"); endif;?>">
-                                <a class="main-navigation__list-item-link" href="#"><?=($project_array[$key]);?> </a>
-                                <span class="main-navigation__list-item-count"><?=count_project($array_tasks, $project_array[$key]);?> </span>
+                                <a class="main-navigation__list-item-link" href="#"><?=($project_array[$key]['name_project']);?> </a>
+                                <span class="main-navigation__list-item-count"><?=count_project($array_tasks, $project_array[$key]['id']);?> </span>
                             </li>
                         <?php endforeach;?>
                     </ul>

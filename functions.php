@@ -99,4 +99,32 @@ function getTasks(mysqli $link, int $user_id, bool $show_complete_tasks, int $pr
     return $tasks;
 }
 
+function addTaskByUserId (mysqli $link, int $user_id, $data_task_form)
+{
+
+    // Извлекаем параметры из массива и подготавлиаваем их для запроса
+    $params = [];
+    $params[] = $user_id;
+    $params[] = $data_task_form['project'];
+    $params[] = $data_task_form['name'];
+    $params[] = $data_task_form['create_date'];
+    $params[] = null;
+    $params[] = $data_task_form['date'];
+    $params[] = $data_task_form['file'];
+    //$params[] = false;
+
+    //Составляем SQL запрос
+    $sql = "INSERT INTO tasks ('user_id', 'project_id', 'name_task', 'create_date_task', 'run_date_task', 'limit_date_task', 'file_task', 'status') VALUES (?,?,?,?,?,?,?,'false')";
+    $stmt = db_get_prepare_stmt($link, $sql, $params);
+    mysqli_stmt_execute($stmt);
+    $mysqli_result = mysqli_stmt_get_result($stmt);
+    return $mysqli_result;
+}
+
+function validateDate($date)
+{
+    $format = 'Y-m-d H:i:s';
+    $d = DateTime::createFromFormat($format, $date);
+    return $d && $d->format($format) == $date;
+}
 ?>

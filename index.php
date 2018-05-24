@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     foreach ($_POST as $field => $value) {
         if ($field == 'name'){
             if (empty($_POST[$field])) $errors_form_task[$field] = 'Поле на заполнено!';
-            $data_fields_from_task[$field] = $_POST[$field];
+            $data_fields_form_task[$field] = $_POST[$field];
         }
         if ($field == 'project'){
             $select_project_exist = false;
@@ -51,12 +51,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                 }
             }
             if (!$select_project_exist) $errors_form_task[$field] = 'Такого проекта не существует';
-            $data_fields_from_task[$field] = $_POST[$field];
-            $data_fields_from_task['create_date'] = date('Y-m-d H:i:s');
+            $data_fields_form_task[$field] = $_POST[$field];
+            $data_fields_form_task['create_date'] = date('Y-m-d H:i:s');
         }
         if ($field == 'date') {
             if (!(validateDate($_POST[$field]))) $errors_form_task[$field] = "Введите дату в формате: ГГГГ-ММ-ДД ЧЧ:ММ:СС";
-            $data_fields_from_task[$field] = $_POST[$field];
+            $data_fields_form_task[$field] = $_POST[$field];
         }
     }
 
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
 
         $file_name = $_FILES['preview']['name'];
-        $file_path = __DIR__.'\\';
+        $file_path = $_SERVER['DOCUMENT_ROOT'].'/';
 
         $file_size = $_FILES['preview']['size'];
         $file_type = finfo_file($finfo, $_FILES['preview']['tmp_name']);
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             $errors_form_task['preview'] = 'Загрузите текстовый файл размером не более 200 Кб';
         }
         else {
-            $data_fields_from_task['file'] = $file_path . $file_name;
+            $data_fields_form_task['file'] = $file_path . $file_name;
         }
     }
 
@@ -82,17 +82,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
      if (count($errors_form_task) == 0){
         // Если файл прошел валидацию, то добавляем его в корень директории
-        if (isset($data_fields_from_task['file'])) {
+        if (isset($data_fields_form_task['file'])) {
             move_uploaded_file($_FILES['preview']['tmp_name'], $file_path.$file_name);
         }
         // Иначе, вместо пути к файлу записываем пустую строку.
         else {
-            $data_fields_from_task['file'] = $_FILES['preview']['name'];
+            $data_fields_form_task['file'] = $_FILES['preview']['name'];
         }
         // Вызываю функцию добавления задачи в БД (линк, массив с полями)
 
-         If (addTaskByUserId($link, $user_id, $data_fields_from_task)){
-            echo "Задача добавлена";
+         If (addTaskByUserId($link, $user_id, $data_fields_form_task)){
+             header('Location: /');
          }
 
 
@@ -104,7 +104,8 @@ $array_tasks = getTasks($link, $user_id, $show_complete_tasks, $current_project_
 
 $modal_task = include_template('templates/modal-form-task.php',[
     'errors_form_task' => $errors_form_task,
-    'project_array' => $project_array
+    'project_array' => $project_array,
+    'data_fields_form_task' => $data_fields_form_task
 ]);
 
 $page_content = include_template('templates/index.php', [

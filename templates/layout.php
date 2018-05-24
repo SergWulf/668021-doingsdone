@@ -43,10 +43,14 @@
 
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
+                        <li class="main-navigation__list-item main-navigation__list-item--active">
+                            <a class="main-navigation__list-item-link" href="#">Все</a>
+                            <span class="main-navigation__list-item-count"><?php $cnt_project_all = end($count_projects_array); echo $cnt_project_all['cnt']; ?></span>
+                        </li>
                         <?php foreach ($project_array as $key => $project_name): ?>
-                            <li class="main-navigation__list-item <?php if ($key == 0): echo("main-navigation__list-item--active"); endif;?>">
+                            <li class="main-navigation__list-item <?php ?>">
                                 <a class="main-navigation__list-item-link" href="#"><?=($project_array[$key]['name_project']);?> </a>
-                                <span class="main-navigation__list-item-count"><?=count_project($array_tasks, $project_array[$key]['id']);?> </span>
+                                <span class="main-navigation__list-item-count"><?=$count_projects_array[$key]['cnt'];?> </span>
                             </li>
                         <?php endforeach;?>
                     </ul>

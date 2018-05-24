@@ -7,7 +7,7 @@
         <div class="form__row">
             <label class="form__label" for="name">Название <sup>*</sup></label>
 
-            <input class="form__input <?php if (isset($errors_form_task['name'])): echo 'form__input--error'; endif;?>"" type="text" name="name" id="name" value="" placeholder="Введите название">
+            <input class="form__input <?php if (isset($errors_form_task['name'])): echo 'form__input--error'; endif;?>"" type="text" name="name" id="name" value="<?php if (isset($data_fields_form_task['name'])): echo $data_fields_form_task['name']; endif;?>" placeholder="Введите название">
             <?php if (isset($errors_form_task['name'])):  echo '<p class="form__message">'.$errors_form_task['name'].'</p>'; endif; ?>
         </div>
 
@@ -16,18 +16,18 @@
 
             <select class="form__input form__input--select <?php if (isset($errors_form_task['project'])): echo 'form__input--error'; endif;?>" name="project" id="project">
                 <?php foreach($project_array as $project):?>
-                <option value="<?=$project['id'];?>"><?=$project['name_project'];?></option>
+                <option value="<?=$project['id'];?>" <?php if ((isset($data_fields_form_task['project'])) and ($data_fields_form_task['project'] == $project['id'])): echo 'selected'; endif;?>><?=$project['name_project'];?></option>
                 <?php endforeach;?>
             </select>
-            <?php if (isset($errors_form_task['project'])):  echo '<p class="form__message">'.$errors_form_task['project'].'</p>'; endif; ?>
+            <p class="form__message"><?php if (isset($errors_form_task['project'])):  echo $errors_form_task['project']; endif; ?></p>
         </div>
 
         <div class="form__row">
             <label class="form__label" for="date">Срок выполнения</label>
 
-            <input class="form__input form__input--date <?php if (isset($errors_form_task['date'])): echo 'form__input--error'; endif;?>" type="text" name="date" id="date"
+            <input class="form__input form__input--date <?php if (isset($errors_form_task['date'])): echo 'form__input--error'; endif;?>" type="text" name="date" id="date" value="<?php if (isset($data_fields_form_task['date'])): echo $data_fields_form_task['date']; endif;?>"
                    placeholder="Введите дату и время">
-            <?php if (isset($errors_form_task['date'])):  echo '<p class="form__message">'.$errors_form_task['date'].'</p>'; endif; ?>
+            <p class="form__message"><?php if (isset($errors_form_task['date'])):  echo $errors_form_task['date']; endif; ?></p>
         </div>
 
         <div class="form__row">
@@ -40,7 +40,7 @@
                     <span>Выберите файл</span>
                 </label>
             </div>
-            <?php if (isset($errors_form_task['preview'])):  echo '<p class="form__message">'.$errors_form_task['preview'].'</p>'; endif; ?>
+            <p class="form__message"><?php if (isset($errors_form_task['preview'])):  echo $errors_form_task['preview']; endif; ?></p>
         </div>
 
         <div class="form__row form__row--controls">

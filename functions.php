@@ -1,19 +1,22 @@
 <?php
 
 // Функция подсчета количества проектов
-function count_project($list_tasks, $id_project)
+function count_projects(int $user_id, mysqli $link)
 {
-    $current_count_project = 0;
-    if ($id_project == 0) {
-        return count($list_tasks);
+    $sql_count_projects = 'SELECT project_id, count(*) AS cnt FROM tasks WHERE user_id = ? GROUP BY project_id';
+    $stmt = db_get_prepare_stmt($link, $sql_count_projects, [$user_id]);
+    mysqli_stmt_execute($stmt);
+    $mysqli_result = mysqli_stmt_get_result($stmt);
+    $cnt_projects = mysqli_fetch_all($mysqli_result, MYSQLI_ASSOC);
+    $cnt_rows_projects = mysqli_num_rows($mysqli_result);
+    $count_all_projects = 0;
+    foreach ($cnt_projects as $index => $values)
+    {
+        $count_all_projects = $cnt_projects[$index]['cnt'] + $count_all_projects;
     }
-
-    foreach ($list_tasks as $description_task => $attributes_of_task) {
-        if ($id_project == $list_tasks[$description_task]['project_id']) {
-            $current_count_project++;
-        }
-    }
-    return $current_count_project;
+    $cnt_projects[$cnt_rows_projects]['project_id'] = 'project_all';
+    $cnt_projects[$cnt_rows_projects]['cnt'] = $count_all_projects;
+    return $cnt_projects;
 }
 
 // Функция - шаблонизатор
@@ -48,4 +51,33 @@ function task_important($task)
     return FALSE;
 }
 
+function getUserById(int $user_id, mysqli $link)
+{
+    $sql_user_id = 'SELECT id, name_user  FROM users WHERE id = ?';
+    $stmt = db_get_prepare_stmt($link, $sql_user_id, [$user_id]);
+    mysqli_stmt_execute($stmt);
+    $mysqli_result = mysqli_stmt_get_result($stmt);
+    $user = mysqli_fetch_assoc($mysqli_result);
+    return $user;
+}
+
+function getProjectsByUserId(int $user_id, mysqli $link)
+{
+    $sql_projects_user_id = 'SELECT * FROM projects WHERE user_id = ?';
+    $stmt = db_get_prepare_stmt($link, $sql_projects_user_id, [$user_id]);
+    mysqli_stmt_execute($stmt);
+    $mysqli_result = mysqli_stmt_get_result($stmt);
+    $projects = mysqli_fetch_all($mysqli_result, MYSQLI_ASSOC);
+    return $projects;
+}
+
+function getTasksByUser(int $user_id, mysqli $link)
+{
+    $sql_tasks_user_id = 'SELECT * FROM tasks WHERE user_id = ?';
+    $stmt = db_get_prepare_stmt($link, $sql_tasks_user_id, [$user_id]);
+    mysqli_stmt_execute($stmt);
+    $mysqli_result = mysqli_stmt_get_result($stmt);
+    $tasks = mysqli_fetch_all($mysqli_result, MYSQLI_ASSOC);
+    return $tasks;
+}
 ?>

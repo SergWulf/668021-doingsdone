@@ -8,7 +8,7 @@
 
 <div class="tasks-controls">
     <nav class="tasks-switch">
-        <a href="/index.php?id=<?=PROJECT_ALL;?>" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
+        <a href="/index.php?id=<?=PROJECT_ALL;?>" class="tasks-switch__item <?php if (($filter_task == 0) and ($current_project_id == PROJECT_ALL)) : echo 'tasks-switch__item--active'; endif; ?>">Все задачи</a>
         <a href="/index.php?filter=<?=$filter_tasks['today'];?>" class="tasks-switch__item <?php if ($filter_tasks['today'] == $filter_task): echo 'tasks-switch__item--active'; endif; ?>">Повестка дня</a>
         <a href="/index.php?filter=<?=$filter_tasks['tomorrow'];?>" class="tasks-switch__item <?php if ($filter_tasks['tomorrow'] == $filter_task): echo 'tasks-switch__item--active'; endif; ?>">Завтра</a>
         <a href="/index.php?filter=<?=$filter_tasks['overdue'];?>" class="tasks-switch__item <?php if ($filter_tasks['overdue'] == $filter_task): echo 'tasks-switch__item--active'; endif; ?>">Просроченные</a>
@@ -30,7 +30,7 @@
                     <span class="checkbox__text"><?=strip_tags(($array_tasks[$index]['name_task'])); ?></span>
                 </label>
             </td>
-            <td class="task__file"><a href="<?php if (count($array_tasks[$index]['file_task'])): echo basename($array_tasks[$index]['file_task']); endif;?>"><?php if (count($array_tasks[$index]['file_task'])): echo basename($array_tasks[$index]['file_task']); endif; ?></a></td>
+            <td class="task__file"><a href="<?php if ($array_tasks[$index]['file_task'] != ''): echo basename($array_tasks[$index]['file_task']); endif;?>"><?php if ($array_tasks[$index]['file_task'] != ''): echo basename($array_tasks[$index]['file_task']); endif; ?></a></td>
             <td class="task__date"><?=strip_tags(($array_tasks[$index]['limit_date_task'])); ?></td>
         </tr>
     <?php endforeach; ?>

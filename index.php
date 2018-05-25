@@ -151,8 +151,15 @@ if (isset($_SESSION['username'])) {
             }
 
             if ($field == 'date') {
-                if (!(validateDate($_POST[$field]))) $errors_form_task[$field] = "Введите дату в формате: ГГГГ-ММ-ДД ЧЧ:ММ:СС";
-                $data_fields_form_task[$field] = $_POST[$field];
+                if ((!(validateDate($_POST[$field]))) and ($_POST[$field] != '')) {
+                    $errors_form_task[$field] = "Если вводите дату, то формате: ГГГГ-ММ-ДД ЧЧ:ММ, иначе оставьте поле пустым";
+                }
+                if ($_POST[$field] == '') {
+                    $data_fields_form_task[$field] = $_POST[$field];
+                }
+                else {
+                    $data_fields_form_task[$field] = $_POST[$field];
+                }
             }
         }
 
@@ -166,8 +173,8 @@ if (isset($_SESSION['username'])) {
             $file_size = $_FILES['preview']['size'];
             $file_type = finfo_file($finfo, $_FILES['preview']['tmp_name']);
 
-            if (($file_type !== 'text/plain') or ($file_size > 200000)) {
-                $errors_form_task['preview'] = 'Загрузите текстовый файл размером не более 200 Кб';
+            if ($file_size > 1000000)  { // and ($file_size != 0))
+                $errors_form_task['preview'] = 'Загрузите любой файл размером не более 1 Мб';
             } else {
                 $data_fields_form_task['file'] = $file_path . $file_name;
             }
@@ -180,12 +187,12 @@ if (isset($_SESSION['username'])) {
                 move_uploaded_file($_FILES['preview']['tmp_name'], $file_path . $file_name);
             } // Иначе, вместо пути к файлу записываем пустую строку.
             else {
-                $data_fields_form_task['file'] = $_FILES['preview']['name'];
+                $data_fields_form_task['file'] = '';
             }
             // Вызываю функцию добавления задачи в БД (линк, массив с полями)
 
             If (addTaskByUserId($link, $user_id, $data_fields_form_task)) {
-                header('Location: /');
+                header('Location: /index.php?id=-1');
             }
 
 
@@ -215,7 +222,8 @@ if (isset($_SESSION['username'])) {
         'array_tasks' => $array_tasks,
         'show_complete_tasks' => $show_complete_tasks,
         'filter_tasks' => $filter_tasks,
-        'filter_task' => $filter_task
+        'filter_task' => $filter_task,
+        'current_project_id' => $current_project_id
     ]);
 
     $layout_content = include_template('templates/layout.php', [
@@ -248,12 +256,12 @@ else {
 
         $_POST['email'] = strip_tags($_POST['email']);
 
-        $data_user = checkEmailUser($link, $_POST['email']);
+        $data_user_form_auth = checkEmailUser($link, $_POST['email']);
 
-        if (count($data_user)) {
+        if (count($data_user_form_auth)) {
 
             $data_user_form_auth['email'] = $_POST['email'];
-            if (!password_verify($_POST['password'], $data_user['password_user'])){
+            if (!password_verify($_POST['password'], $data_user_form_auth['password_user'])){
                 $errors_form_auth['password'] = 'Ваш пароль не совпадает, попробуйте еще раз';
             }
 
@@ -264,7 +272,7 @@ else {
         }
 
         if (count($errors_form_auth) == 0) {
-            $_SESSION['username'] = $data_user;
+            $_SESSION['username'] = $data_user_form_auth;
             header('Location: /');
         }
     }
@@ -294,7 +302,8 @@ else {
         'array_tasks' => $array_tasks,
         'show_complete_tasks' => $show_complete_tasks,
         'filter_tasks' => $filter_tasks,
-        'filter_task' => $filter_task
+        'filter_task' => $filter_task,
+        'current_project_id' => $current_project_id
     ]);
 
     $layout_content = include_template('templates/layout.php', [

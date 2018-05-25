@@ -92,4 +92,20 @@ function getTasksByUser(int $user_id, mysqli $link, bool $show_complete_tasks)
     $tasks = mysqli_fetch_all($mysqli_result, MYSQLI_ASSOC);
     return $tasks;
 }
+
+/**
+ * Функция возвращает выборку задач по id проекта
+ */
+function getTasksByProjectId(int $project_id, $list_tasks)
+{
+    $count_task = 0;
+    $select_array_tasks = array();
+    foreach ($list_tasks as $index => $attributes_of_task) {
+        if ($list_tasks[$index]['project_id'] == $project_id){
+            $select_array_tasks[$count_task] = $list_tasks[$index];
+            $count_task = $count_task + 1;
+        }
+    }
+    return $select_array_tasks;
+}
 ?>

@@ -1,7 +1,7 @@
 <?php
 
 // Функция подсчета количества проектов
-function count_projects(int $user_id, mysqli $link)
+function count_projects(mysqli $link, int $user_id)
 {
     $sql_count_projects = 'SELECT project_id, count(*) AS cnt FROM tasks WHERE user_id = ? GROUP BY project_id';
     $stmt = db_get_prepare_stmt($link, $sql_count_projects, [$user_id]);
@@ -50,7 +50,7 @@ function task_important($task)
     return FALSE;
 }
 
-function getUserById(int $user_id, mysqli $link)
+function getUserById(mysqli $link, int $user_id)
 {
     $sql_user_id = 'SELECT id, name_user  FROM users WHERE id = ?';
     $stmt = db_get_prepare_stmt($link, $sql_user_id, [$user_id]);
@@ -60,7 +60,7 @@ function getUserById(int $user_id, mysqli $link)
     return $user;
 }
 
-function getProjectsByUserId(int $user_id, mysqli $link)
+function getProjectsByUserId(mysqli $link, int $user_id)
 {
     $sql_projects_user_id = 'SELECT * FROM projects WHERE user_id = ?';
     $stmt = db_get_prepare_stmt($link, $sql_projects_user_id, [$user_id]);
@@ -70,7 +70,7 @@ function getProjectsByUserId(int $user_id, mysqli $link)
     return $projects;
 }
 
-function getTasksByUser(int $user_id, mysqli $link, bool $show_complete_tasks)
+function getTasks(mysqli $link, int $user_id, bool $show_complete_tasks, int $project_id)
 {
     $sql = 'SELECT * FROM tasks';
     $where_clause = [];
@@ -83,6 +83,12 @@ function getTasksByUser(int $user_id, mysqli $link, bool $show_complete_tasks)
         $where_clause[] = 'status = false';
     }
 
+    if ($project_id !== PROJECT_ALL) {
+        $where_clause[] = 'project_id = ?';
+        $params[] = $project_id;
+    }
+
+
     if (count($where_clause)) {
         $sql = $sql . ' WHERE ' . implode(' AND ', $where_clause);
     }
@@ -92,4 +98,5 @@ function getTasksByUser(int $user_id, mysqli $link, bool $show_complete_tasks)
     $tasks = mysqli_fetch_all($mysqli_result, MYSQLI_ASSOC);
     return $tasks;
 }
+
 ?>

@@ -43,13 +43,13 @@
 
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
-                        <li class="main-navigation__list-item main-navigation__list-item--active">
-                            <a class="main-navigation__list-item-link" href="#">Все</a>
+                        <li class="main-navigation__list-item <?php if (PROJECT_ALL == $current_project_id): echo 'main-navigation__list-item--active'; endif; ?>">
+                            <a class="main-navigation__list-item-link" href="index.php">Все</a>
                             <span class="main-navigation__list-item-count"><?=$count_projects_array[PROJECT_ALL];?></span>
                         </li>
                         <?php foreach ($project_array as $project): ?>
-                            <li class="main-navigation__list-item <?php ?>">
-                                <a class="main-navigation__list-item-link" href="#"><?=($project['name_project']);?> </a>
+                            <li class="main-navigation__list-item <?php if ($project['id'] == $current_project_id): echo 'main-navigation__list-item--active'; endif; ?>">
+                                <a class="main-navigation__list-item-link" href="<?='index.php?id='.$project['id'];?>"><?=($project['name_project']);?> </a>
                                 <span class="main-navigation__list-item-count"><?=$count_projects_array[$project['id']];?> </span>
                             </li>
                         <?php endforeach;?>

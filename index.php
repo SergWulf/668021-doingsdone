@@ -146,7 +146,7 @@ if (isset($_SESSION['username'])) {
                 $data_fields_form_task['create_date'] = date('Y-m-d H:i:s');
             }
 
-            if (!isset($_POST['form_project'])) {
+            if (!isset($_POST['project'])) {
                 $errors_form_task['project'] = 'Ни создано ни одного проекта, создайте хотя бы один';
             }
 

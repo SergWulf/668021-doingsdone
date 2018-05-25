@@ -130,10 +130,16 @@ if (isset($_SESSION['username'])) {
                         break;
                     }
                 }
-                if (!$select_project_exist) $errors_form_task[$field] = 'Такого проекта не существует, создайте новый и выберите его';
+
+                if (!$select_project_exist) $errors_form_task[$field] = 'Такого проекта не существует';
                 $data_fields_form_task[$field] = strip_tags($_POST[$field]);
                 $data_fields_form_task['create_date'] = date('Y-m-d H:i:s');
             }
+
+            if (!isset($_POST['form_project'])) {
+                $errors_form_task['project'] = 'Ни создано ни одного проекта, создайте хотя бы один';
+            }
+
             if ($field == 'date') {
                 if (!(validateDate($_POST[$field]))) $errors_form_task[$field] = "Введите дату в формате: ГГГГ-ММ-ДД ЧЧ:ММ:СС";
                 $data_fields_form_task[$field] = $_POST[$field];
@@ -180,7 +186,8 @@ if (isset($_SESSION['username'])) {
 
     $modal_auth = include_template('templates/auth_form.php',[
         'errors_form_auth' => $errors_form_auth,
-        'data_user_form_auth' => $data_user_form_auth
+        'data_user_form_auth' => $data_user_form_auth,
+        'call_form_auth' => $call_form_auth
     ]);
 
     $modal_project = include_template('templates/modal-form-project.php',[
@@ -223,6 +230,9 @@ if (isset($_SESSION['username'])) {
 
 }
 else {
+
+
+
     // Валидация полей формы авторизации пользователя
     if (($_SERVER['REQUEST_METHOD'] == 'POST') and (isset($_POST['form_auth']))) {
 
@@ -256,7 +266,8 @@ else {
 
     $modal_auth = include_template('templates/auth_form.php',[
         'errors_form_auth' => $errors_form_auth,
-        'data_user_form_auth' => $data_user_form_auth
+        'data_user_form_auth' => $data_user_form_auth,
+        'call_form_auth' => $call_form_auth
     ]);
 
     $modal_project = include_template('templates/modal-form-project.php',[

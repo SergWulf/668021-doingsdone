@@ -8,4 +8,6 @@ $show_complete_tasks = rand(0,1);
 $current_project_id = PROJECT_ALL;
 $errors_form_task = [];
 $data_fields_form_task = [];
+$errors_form_register = [];
+$data_fields_form_register = [];
 ?>

@@ -45,7 +45,7 @@
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
                         <li class="main-navigation__list-item <?php if (PROJECT_ALL == $current_project_id): echo 'main-navigation__list-item--active'; endif; ?>">
-                            <a class="main-navigation__list-item-link" href="index.php">Все</a>
+                            <a class="main-navigation__list-item-link" href="index.php?id=<?=PROJECT_ALL;?>">Все</a>
                             <span class="main-navigation__list-item-count"><?=$count_projects_array[PROJECT_ALL];?></span>
                         </li>
                         <?php foreach ($project_array as $project): ?>

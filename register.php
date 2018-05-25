@@ -36,9 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     }
 }
 
+
+
 $register_form = include_template('templates/register.php',[
     'errors_form_register' => $errors_form_register,
-    'data_fields_form_register' => $data_fields_form_register
+    'data_fields_form_register' => $data_fields_form_register,
 ]);
 
 print($register_form);

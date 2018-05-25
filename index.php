@@ -6,17 +6,17 @@ require_once('init.php');
  */
 
 // Получаем имя текущего пользователя по id
-$row_user = getUserById(2, $link);
+$row_user = getUserById($user_id, $link);
 $name_user = $row_user['name_user'];
 
 // SQL-запрос для получения списка проектов у текущего пользователя
-$project_array = getProjectsByUserId(2, $link);
+$project_array = getProjectsByUserId($user_id, $link);
 
 //SQL-запрос для получения списка задач для выбранного проекта
-$array_tasks = getTasksByUser(2, $link, false);
+$array_tasks = getTasksByUser($user_id, $link, $show_complete_tasks);
 
 //Подсчет количества задач для каждого проекта
-$count_projects_array = count_projects(2, $link);
+$count_projects_array = count_projects($user_id, $link);
 
 $page_content = include_template('templates/index.php', ['array_tasks' => $array_tasks]);
 $layout_content = include_template('templates/layout.php', [

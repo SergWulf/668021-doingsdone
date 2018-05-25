@@ -12,9 +12,14 @@ if (isset($_SESSION['username'])) {
 
 // SQL-запрос для получения списка проектов у текущего пользователя
     $project_array = getProjectsByUserId($link, $user_id);
-
+    $count_projects_array = [];
 //Подсчет количества задач для каждого проекта
-    $count_projects_array = count_projects($link, $user_id);
+    foreach ($project_array as $project) {
+        $count_projects_array[$project['id']] = 0;
+    }
+    foreach (count_projects($link, $user_id) as $project_id => $count_project) {
+        $count_projects_array[$project_id] = $count_project;
+    }
 
 
 // Проверка переменной id

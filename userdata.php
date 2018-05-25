@@ -25,5 +25,5 @@ $filter_tasks = [
     'tomorrow' => 2,
     'overdue' => 3
 ];
-
+$call_form_auth = 0;
 ?>

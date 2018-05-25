@@ -99,8 +99,11 @@ if (isset($_SESSION['username'])) {
     // Валидация поля формы добавления проектов
     if (($_SERVER['REQUEST_METHOD'] == 'POST') and (isset($_POST['form_project']))) {
 
-        if (empty($_POST['name'])) $errors_form_project['name'] = 'Поле не заполнено';
-            $data_fields_form_project['name'] = $_POST['name'];
+        if (empty($_POST['name'])){
+            $errors_form_project['name'] = 'Поле не заполнено';
+        }
+
+        $data_fields_form_project['name'] = strip_tags($_POST['name']);
 
         if (count($errors_form_project) == 0){
             if (addProjectByUserId($link, $user_id, $data_fields_form_project)) {
@@ -117,7 +120,7 @@ if (isset($_SESSION['username'])) {
         foreach ($_POST as $field => $value) {
             if ($field == 'name') {
                 if (empty($_POST[$field])) $errors_form_task[$field] = 'Поле на заполнено!';
-                $data_fields_form_task[$field] = $_POST[$field];
+                $data_fields_form_task[$field] = strip_tags($_POST[$field]);
             }
             if ($field == 'project') {
                 $select_project_exist = false;
@@ -128,7 +131,7 @@ if (isset($_SESSION['username'])) {
                     }
                 }
                 if (!$select_project_exist) $errors_form_task[$field] = 'Такого проекта не существует, создайте новый и выберите его';
-                $data_fields_form_task[$field] = $_POST[$field];
+                $data_fields_form_task[$field] = strip_tags($_POST[$field]);
                 $data_fields_form_task['create_date'] = date('Y-m-d H:i:s');
             }
             if ($field == 'date') {
@@ -223,14 +226,19 @@ else {
     // Валидация полей формы авторизации пользователя
     if (($_SERVER['REQUEST_METHOD'] == 'POST') and (isset($_POST['form_auth']))) {
 
+        $_POST['email'] = strip_tags($_POST['email']);
+
         $data_user = checkEmailUser($link, $_POST['email']);
 
         if (count($data_user)) {
 
             $data_user_form_auth['email'] = $_POST['email'];
-            if (!password_verify($_POST['password'], $data_user['password_user'])) $errors_form_auth['password'] = 'Ваш пароль не совпадает, попробуйте еще раз';
+            if (!password_verify($_POST['password'], $data_user['password_user'])){
+                $errors_form_auth['password'] = 'Ваш пароль не совпадает, попробуйте еще раз';
+            }
 
-        } else {
+        }
+        else {
             $errors_form_auth['email'] = 'Такого email в базе данных не существует';
 
         }
@@ -265,7 +273,8 @@ else {
     $page_content = include_template('templates/index.php', [
         'array_tasks' => $array_tasks,
         'show_complete_tasks' => $show_complete_tasks,
-        'filter_tasks' => $filter_tasks
+        'filter_tasks' => $filter_tasks,
+        'filter_task' => $filter_task
     ]);
 
     $layout_content = include_template('templates/layout.php', [

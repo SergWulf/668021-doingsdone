@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     foreach ($_POST as $field => $value) {
         if ($field == 'email'){
             if (!filter_var($value, FILTER_VALIDATE_EMAIL)) $errors_form_register[$field] = 'Введите email корректно';
-            $data_fields_form_register[$field] = $_POST[$field];
+            $data_fields_form_register[$field] = strip_tags($_POST[$field]);
 
         }
         if ($field == 'password'){
@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         }
         if ($field == 'name') {
             if (empty($_POST[$field])) $errors_form_register[$field] = 'Поле на заполнено!';
-            $data_fields_form_register[$field] = $_POST[$field];
+            $data_fields_form_register[$field] = strip_tags($_POST[$field]);
         }
     }
 

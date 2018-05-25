@@ -15,4 +15,8 @@ $data_user_form_auth = [];
 $data_user = [];
 
 $count_projects_array = 0;
+
+$errors_form_project = [];
+$data_fields_form_project = [];
+
 ?>

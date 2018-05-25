@@ -37,6 +37,20 @@ if (isset($_SESSION['username'])) {
 //SQL-запрос для получения списка задач для выбранного проекта
     $array_tasks = getTasks($link, $user_id, $show_complete_tasks, $current_project_id);
 
+    // Валидация поля формы добавления проектов
+    if (($_SERVER['REQUEST_METHOD'] == 'POST') and (isset($_POST['form_project']))) {
+
+        if (empty($_POST['name'])) $errors_form_project['name'] = 'Поле не заполнено';
+            $data_fields_form_project['name'] = $_POST['name'];
+
+        if (count($errors_form_project) == 0){
+            if (addProjectByUserId($link, $user_id, $data_fields_form_project)) {
+                header('Location: /');
+            }
+        }
+    }
+
+
 // Валидация полей формы добавления задачи
     if (($_SERVER['REQUEST_METHOD'] == 'POST') and (isset($_POST['form_task']))) {
 
@@ -107,6 +121,11 @@ if (isset($_SESSION['username'])) {
         'data_user_form_auth' => $data_user_form_auth
     ]);
 
+    $modal_project = include_template('templates/modal-form-project.php',[
+        "errors_form_project" => $errors_form_project,
+        "data_fields_form_project" => $data_fields_form_project
+    ]);
+
     $modal_task = include_template('templates/modal-form-task.php',[
         'errors_form_task' => $errors_form_task,
         'project_array' => $project_array,
@@ -132,7 +151,9 @@ if (isset($_SESSION['username'])) {
         'data_user_form_auth' => $data_user_form_auth,
         'modal_auth' => $modal_auth,
         'errors_form_auth' => $errors_form_auth,
-        'data_user' => $data_user
+        'data_user' => $data_user,
+        'errors_form_project' => $errors_form_project,
+        'modal_project' => $modal_project
     ]);
     print($layout_content);
 
@@ -173,6 +194,11 @@ else {
         'data_user_form_auth' => $data_user_form_auth
     ]);
 
+    $modal_project = include_template('templates/modal-form-project.php',[
+        "errors_form_project" => $errors_form_project,
+        "data_fields_form_project" => $data_fields_form_project
+    ]);
+
     $modal_task = include_template('templates/modal-form-task.php',[
         'errors_form_task' => $errors_form_task,
         'project_array' => $project_array,
@@ -198,50 +224,13 @@ else {
         'data_user_form_auth' => $data_user_form_auth,
         'modal_auth' => $modal_auth,
         'errors_form_auth' => $errors_form_auth,
-        'data_user' => $data_user
+        'data_user' => $data_user,
+        'errors_form_project' => $errors_form_project,
+        'modal_project' => $modal_project
     ]);
 
     print($layout_content);
 
 }
 
-
-
-
-
-$page_guest = include_template('templates/guest.php',[]);
-
-$modal_auth = include_template('templates/auth_form.php',[
-    'errors_form_auth' => $errors_form_auth,
-    'data_user_form_auth' => $data_user_form_auth
-]);
-
-$modal_task = include_template('templates/modal-form-task.php',[
-    'errors_form_task' => $errors_form_task,
-    'project_array' => $project_array,
-    'data_fields_form_task' => $data_fields_form_task
-]);
-
-$page_content = include_template('templates/index.php', [
-    'array_tasks' => $array_tasks,
-    'show_complete_tasks' => $show_complete_tasks
-]);
-
-$layout_content = include_template('templates/layout.php', [
-    'title' => 'Дела в порядке',
-    'name_user' => $name_user,
-    'content' => $page_content,
-    'project_array' => $project_array,
-    'array_tasks' => $array_tasks,
-    'count_projects_array' => $count_projects_array,
-    'current_project_id' => $current_project_id,
-    'modal_task' => $modal_task,
-    'errors_form_task' => $errors_form_task,
-    'guest' => $page_guest,
-    'data_user_form_auth' => $data_user_form_auth,
-    'modal_auth' => $modal_auth,
-    'errors_form_auth' => $errors_form_auth,
-    'data_user' => $data_user
-]);
-print($layout_content);
 ?>

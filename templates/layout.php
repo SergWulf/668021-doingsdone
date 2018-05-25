@@ -30,7 +30,7 @@
                     </div>
 
                     <div class="user-menu__data">
-                        <p><?=$name_user;?></p>
+                        <p><?=strip_tags($name_user);?></p>
 
                         <a href="logout.php">Выйти</a>
                     </div>
@@ -50,7 +50,7 @@
                         </li>
                         <?php foreach ($project_array as $project): ?>
                             <li class="main-navigation__list-item <?php if ($project['id'] == $current_project_id): echo 'main-navigation__list-item--active'; endif; ?>">
-                                <a class="main-navigation__list-item-link" href="<?='index.php?id='.$project['id'];?>"><?=($project['name_project']);?> </a>
+                                <a class="main-navigation__list-item-link" href="<?='index.php?id='.$project['id'];?>"><?=strip_tags($project['name_project']);?> </a>
                                 <span class="main-navigation__list-item-count"><?=$count_projects_array[$project['id']];?> </span>
                             </li>
                         <?php endforeach;?>

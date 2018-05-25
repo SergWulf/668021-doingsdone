@@ -16,7 +16,7 @@
 
             <select class="form__input form__input--select <?php if (isset($errors_form_task['project'])): echo 'form__input--error'; endif;?>" name="project" id="project">
                 <?php foreach($project_array as $project):?>
-                <option value="<?=$project['id'];?>" <?php if ((isset($data_fields_form_task['project'])) and ($data_fields_form_task['project'] == $project['id'])): echo 'selected'; endif;?>><?=$project['name_project'];?></option>
+                <option value="<?=$project['id'];?>" <?php if ((isset($data_fields_form_task['project'])) and ($data_fields_form_task['project'] == $project['id'])): echo 'selected'; endif;?>><?=strip_tags($project['name_project']);?></option>
                 <?php endforeach;?>
             </select>
             <p class="form__message"><?php if (isset($errors_form_task['project'])):  echo $errors_form_task['project']; endif; ?></p>

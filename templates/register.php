@@ -55,7 +55,7 @@
                     <div class="form__row form__row--controls">
                         <p class="error-message"><?=(count($errors_form_register)?'Пожалуйста, исправьте ошибки в форме':'');?></p>
 
-                        <input class="button" type="submit" name="" value="Зарегистрироваться">
+                        <input class="button" type="submit" name="form_reg" value="Зарегистрироваться">
                     </div>
                 </form>
             </main>

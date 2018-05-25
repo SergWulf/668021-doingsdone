@@ -3,6 +3,13 @@
 // Функция подсчета количества проектов
 function count_projects(mysqli $link, int $user_id)
 {
+
+    $sql_projects_user = "SELECT `id` FROM projects WHERE `user_id` = ?";
+    $stmt = db_get_prepare_stmt($link, $sql_projects_user, [$user_id]);
+    mysqli_stmt_execute($stmt);
+    $mysqli_result = mysqli_stmt_get_result($stmt);
+    $project_array = mysqli_fetch_all($mysqli_result, MYSQLI_ASSOC);
+
     $sql_count_projects = 'SELECT project_id, count(*) AS cnt FROM tasks WHERE user_id = ? GROUP BY project_id';
     $stmt = db_get_prepare_stmt($link, $sql_count_projects, [$user_id]);
     mysqli_stmt_execute($stmt);
@@ -10,9 +17,32 @@ function count_projects(mysqli $link, int $user_id)
     $aggregated_projects = mysqli_fetch_all($mysqli_result, MYSQLI_ASSOC);
     $result = [];
     $count_all = 0;
-    foreach ($aggregated_projects as $project) {
-        $result[$project['project_id']] = (int)$project['cnt'];
-        $count_all += (int)$project['cnt'];
+    $project_exist_id = false;
+
+    if (!count($aggregated_projects)) {
+        foreach ($project_array as $key => $project_id) {
+
+            $result[$project_id['id']] = 0;
+        }
+    }
+    else{
+        foreach ($aggregated_projects as $project) {
+            $result[$project['project_id']] = (int)$project['cnt'];
+            $count_all += (int)$project['cnt'];
+        }
+        foreach ($project_array as $key => $p_project_id) {
+
+            foreach ($result as $index => $r_project_id) {
+                if ($p_project_id['id'] == $index) {
+                    $project_exist_id = true;
+                }
+            }
+            if (!$project_exist_id) {
+                $result[$p_project_id['id']] = 0;
+                $project_exist_id = false;
+            }
+            $project_exist_id = false;
+        }
     }
     $result[PROJECT_ALL] = $count_all;
     return $result;
@@ -97,6 +127,23 @@ function getTasks(mysqli $link, int $user_id, bool $show_complete_tasks, int $pr
     $mysqli_result = mysqli_stmt_get_result($stmt);
     $tasks = mysqli_fetch_all($mysqli_result, MYSQLI_ASSOC);
     return $tasks;
+}
+
+function addProjectByUserId (mysqli $link, int $user_id, $data_task_project)
+{
+
+    // Извлекаем параметры из массива и подготавлиаваем их для запроса
+    $params = [];
+    $params[] = $user_id;
+    $params[] = $data_task_project['name'];
+
+
+    //Составляем SQL запрос
+    $sql = "INSERT INTO projects (`user_id`,`name_project`) VALUES (?, ?)";
+    $stmt = db_get_prepare_stmt($link, $sql, $params);
+    mysqli_stmt_execute($stmt);
+
+    return mysqli_insert_id($link);
 }
 
 function addTaskByUserId (mysqli $link, int $user_id, $data_task_form)

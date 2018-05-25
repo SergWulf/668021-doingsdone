@@ -143,19 +143,19 @@ function addUser(mysqli $link, $data_register_form)
     return mysqli_insert_id($link);
 }
 
-function checkEmailUser(mysqli $link, $email_add_user)
+function checkEmailUser(mysqli $link, $email_user)
 {
-    // Получить список пользователей
-    $sql = "SELECT `email_user` FROM users";
-    $mysqli_result = mysqli_query($link, $sql);
-    $array_email_users = mysqli_fetch_all($mysqli_result, MYSQLI_ASSOC);
+    $params = [];
+    $params[] = $email_user;
 
-    // Сравнить адрес почты с каждым адресом почты пользователей
-    foreach($array_email_users as $email)
-    {
-        if ($email == $email_add_user) return false;
-    }
+    // Получить данные пользователя
+    $sql = "SELECT * FROM users WHERE `email_user` = ?";
 
-    return true;
+    $stmt = db_get_prepare_stmt($link, $sql, $params);
+    mysqli_stmt_execute($stmt);
+    $mysqli_result = mysqli_stmt_get_result($stmt);
+    $data_user = mysqli_fetch_assoc($mysqli_result);
+
+    return $data_user;
 }
 ?>

@@ -126,7 +126,9 @@ function getTasks(mysqli $link, int $user_id, bool $show_complete_tasks, int $pr
 
         foreach ($tasks as $task) {
             $task_time = strtotime($task['limit_date_task']);
-            if (($task_time > $cur_time) and ($task_time < $time_end_day)) $tasks_filter[] = $task;
+            if (($task_time > $cur_time) and ($task_time < $time_end_day)){
+                $tasks_filter[] = $task;
+            }
         }
         return $tasks_filter;
 
@@ -143,7 +145,9 @@ function getTasks(mysqli $link, int $user_id, bool $show_complete_tasks, int $pr
 
         foreach ($tasks as $task) {
             $task_time = strtotime($task['limit_date_task']);
-            if (($task_time > $tomorrow_time_begin) and ($task_time < $tomorrow_time_end)) $tasks_filter[] = $task;
+            if (($task_time > $tomorrow_time_begin) and ($task_time < $tomorrow_time_end)){
+                $tasks_filter[] = $task;
+            }
         }
 
         return $tasks_filter;
@@ -159,7 +163,9 @@ function getTasks(mysqli $link, int $user_id, bool $show_complete_tasks, int $pr
 
         foreach ($tasks as $task) {
             $task_time = strtotime($task['limit_date_task']);
-            if (($task_time < $cur_time)) $tasks_filter[] = $task;
+            if (($task_time < $cur_time)){
+                $tasks_filter[] = $task;
+            }
         }
 
         return $tasks_filter;

@@ -21,7 +21,9 @@ if (isset($_SESSION['username'])) {
     }
 
 
-    if ((isset($_SESSION['filter'])) and (!isset($_GET['filter']))) $filter_task = $_SESSION['filter'];
+    if ((isset($_SESSION['filter'])) and (!isset($_GET['filter']))) {
+        $filter_task = $_SESSION['filter'];
+    }
     if (isset($_GET['filter'])){
         if (isset($_SESSION['current_project_id'])){
             unset($_SESSION['current_project_id']);
@@ -47,7 +49,9 @@ if (isset($_SESSION['username'])) {
     }
 
 
-    if((isset($_SESSION['current_project_id'])) and (!isset($_GET['id']))) $current_project_id = $_SESSION['current_project_id'];
+    if((isset($_SESSION['current_project_id'])) and (!isset($_GET['id']))){
+        $current_project_id = $_SESSION['current_project_id'];
+    }
 
 
     // Проверка переменной id
@@ -68,7 +72,9 @@ if (isset($_SESSION['username'])) {
             }
         }
 
-        if ($current_project_id == PROJECT_ALL) $_SESSION['current_project_id'] = PROJECT_ALL;
+        if ($current_project_id == PROJECT_ALL){
+            $_SESSION['current_project_id'] = PROJECT_ALL;
+        }
 
         if ((!$project_exists) and ($current_project_id != PROJECT_ALL)) {
             http_response_code(404);
@@ -119,7 +125,9 @@ if (isset($_SESSION['username'])) {
         // Валидация полей формы: имя, проект, дата
         foreach ($_POST as $field => $value) {
             if ($field == 'name') {
-                if (empty($_POST[$field])) $errors_form_task[$field] = 'Поле на заполнено!';
+                if (empty($_POST[$field])) {
+                    $errors_form_task[$field] = 'Поле на заполнено!';
+                }
                 $data_fields_form_task[$field] = strip_tags($_POST[$field]);
             }
             if ($field == 'project') {
@@ -131,7 +139,9 @@ if (isset($_SESSION['username'])) {
                     }
                 }
 
-                if (!$select_project_exist) $errors_form_task[$field] = 'Такого проекта не существует';
+                if (!$select_project_exist){
+                    $errors_form_task[$field] = 'Такого проекта не существует';
+                }
                 $data_fields_form_task[$field] = strip_tags($_POST[$field]);
                 $data_fields_form_task['create_date'] = date('Y-m-d H:i:s');
             }
@@ -256,7 +266,6 @@ else {
         if (count($errors_form_auth) == 0) {
             $_SESSION['username'] = $data_user;
             header('Location: /');
-
         }
     }
 

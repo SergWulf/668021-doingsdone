@@ -46,10 +46,24 @@ function task_important($task)
 
     if ($diff_time_hours <= 24)
     {
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
+
+/**
+ * Функция показывающая задачи, срок которых истекает в текущий день
+ */
+
+/**
+ * Функция показывающая задачи, срок которых истекает в завтрашний день
+ */
+
+/**
+ * Функция показывающая задачи, срок выполнения которых истек
+ */
+
+
 
 function getUserById(mysqli $link, int $user_id)
 {
@@ -71,7 +85,7 @@ function getProjectsByUserId(mysqli $link, int $user_id)
     return $projects;
 }
 
-function getTasks(mysqli $link, int $user_id, bool $show_complete_tasks, int $project_id)
+function getTasks(mysqli $link, int $user_id, bool $show_complete_tasks, int $project_id, int $filter_task)
 {
     $sql = 'SELECT * FROM tasks';
     $where_clause = [];
@@ -97,6 +111,60 @@ function getTasks(mysqli $link, int $user_id, bool $show_complete_tasks, int $pr
     mysqli_stmt_execute($stmt);
     $mysqli_result = mysqli_stmt_get_result($stmt);
     $tasks = mysqli_fetch_all($mysqli_result, MYSQLI_ASSOC);
+
+
+    $tasks_filter = [];
+    if ($filter_task == 1) {
+        /**
+         *  Запомнить текущий день и текущее время
+         *  Запомнить текущий день и время 23:59:59
+         *  Если в задаче поле limit_date_task попадает в промежуток, то записываем ее в массив
+         */
+
+        $cur_time = time();
+        $time_end_day = strtotime((date('Y-m-d')).' 23:59:59');
+
+        foreach ($tasks as $task) {
+            $task_time = strtotime($task['limit_date_task']);
+            if (($task_time > $cur_time) and ($task_time < $time_end_day)) $tasks_filter[] = $task;
+        }
+        return $tasks_filter;
+
+    }
+
+    if ($filter_task == 2) {
+        /**
+         *  Запомнить завтрашний день и время 00:00:00
+         *  Запомнить завтрашний день и время 23:59:59
+         *  Если в задаче поле limit_date_task попадает в промежуток, то записываем ее в массив
+         */
+        $tomorrow_time_begin = strtotime((date('Y-m-d')).' 23:59:59');
+        $tomorrow_time_end = $tomorrow_time_begin + 86400;
+
+        foreach ($tasks as $task) {
+            $task_time = strtotime($task['limit_date_task']);
+            if (($task_time > $tomorrow_time_begin) and ($task_time < $tomorrow_time_end)) $tasks_filter[] = $task;
+        }
+
+        return $tasks_filter;
+    }
+
+    if ($filter_task == 3) {
+        /**
+         *  Запомнить текущую дату и время
+         *  Сравнить значение текущей даты и времени с датой выполнения задачи
+         *  Если в задаче поле limit_date_task меньше текущей даты, то записываем ее в массив
+         */
+        $cur_time = time();
+
+        foreach ($tasks as $task) {
+            $task_time = strtotime($task['limit_date_task']);
+            if (($task_time < $cur_time)) $tasks_filter[] = $task;
+        }
+
+        return $tasks_filter;
+    }
+
     return $tasks;
 }
 
@@ -175,5 +243,26 @@ function checkEmailUser(mysqli $link, $email_user)
     $data_user = mysqli_fetch_assoc($mysqli_result);
 
     return $data_user;
+}
+
+function setTaskStatus (mysqli $link, int $task_id, bool $check)
+{
+    $params = [];
+    $params[] = $task_id;
+
+    if ($check){
+        $sql = "UPDATE tasks SET status = TRUE WHERE id = ?";
+        $stmt = db_get_prepare_stmt($link, $sql, $params);
+        mysqli_stmt_execute($stmt);
+        return true;
+    }
+    else{
+        $sql = "UPDATE tasks SET status = FALSE WHERE id = ?";
+        $stmt = db_get_prepare_stmt($link, $sql, $params);
+        mysqli_stmt_execute($stmt);
+        return true;
+    }
+
+    return false;
 }
 ?>

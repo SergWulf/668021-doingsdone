@@ -18,6 +18,9 @@
                 <?php foreach($project_array as $project):?>
                 <option value="<?=$project['id'];?>" <?php if ((isset($data_fields_form_task['project'])) and ($data_fields_form_task['project'] == $project['id'])): echo 'selected'; endif;?>><?=$project['name_project'];?></option>
                 <?php endforeach;?>
+                <?php if (!count($project_array)): ?>
+                <option value="-1"><?='Нет проектов';?></option>
+                <?php endif;?>
             </select>
             <p class="form__message"><?php if (isset($errors_form_task['project'])):  echo $errors_form_task['project']; endif; ?></p>
         </div>

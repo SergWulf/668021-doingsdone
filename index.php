@@ -1,19 +1,18 @@
 <?php
 require_once('init.php');
-session_start();
-
 
 if (isset($_SESSION['username'])) {
     $data_user = $_SESSION['username'];
     $user_id = $data_user['id'];
-// Получаем имя текущего пользователя по id
+    // Получаем имя текущего пользователя по id
     $row_user = getUserById($link, $user_id);
     $name_user = $row_user['name_user'];
 
-// SQL-запрос для получения списка проектов у текущего пользователя
+    // SQL-запрос для получения списка проектов у текущего пользователя
     $project_array = getProjectsByUserId($link, $user_id);
     $count_projects_array = [];
-//Подсчет количества задач для каждого проекта
+
+    //Подсчет количества задач для каждого проекта
     foreach ($project_array as $project) {
         $count_projects_array[$project['id']] = 0;
     }
@@ -22,25 +21,80 @@ if (isset($_SESSION['username'])) {
     }
 
 
-// Проверка переменной id
+    if ((isset($_SESSION['filter'])) and (!isset($_GET['filter']))) $filter_task = $_SESSION['filter'];
+    if (isset($_GET['filter'])){
+        if (isset($_SESSION['current_project_id'])){
+            unset($_SESSION['current_project_id']);
+            $current_project_id = PROJECT_ALL;
+        }
+
+        $filter_exists = false;
+        foreach ($filter_tasks as $filter) {
+            if ($_GET['filter'] == $filter){
+                $filter_task = $filter;
+                $_SESSION['filter'] = $filter;
+                $filter_exists = true;
+                break;
+            }
+        }
+
+        if (!$filter_exists) {
+            http_response_code(404);
+            echo include_template('templates/error404.php', ['message' => 'Ошибка 404, такой страницы не существует']);
+            exit;
+        }
+
+    }
+
+
+    if((isset($_SESSION['current_project_id'])) and (!isset($_GET['id']))) $current_project_id = $_SESSION['current_project_id'];
+
+
+    // Проверка переменной id
     if (isset($_GET['id'])) {
+
+        if (isset($_SESSION['filter'])){
+            unset($_SESSION['filter']);
+            $filter_task = 0;
+        }
+
         $project_exists = false;
         foreach ($project_array as $project) {
             if ($_GET['id'] == $project['id']) {
                 $current_project_id = $project['id'];
+                $_SESSION['current_project_id'] = $current_project_id;
                 $project_exists = true;
                 break;
             }
         }
-        if (!$project_exists) {
+
+        if ($current_project_id == PROJECT_ALL) $_SESSION['current_project_id'] = PROJECT_ALL;
+
+        if ((!$project_exists) and ($current_project_id != PROJECT_ALL)) {
             http_response_code(404);
             echo include_template('templates/error404.php', ['message' => 'Ошибка 404, такой страницы не существует']);
             exit;
         }
     }
 
-//SQL-запрос для получения списка задач для выбранного проекта
-    $array_tasks = getTasks($link, $user_id, $show_complete_tasks, $current_project_id);
+    // Проверка запроса на изменение статуса задачи
+    if ((isset($_GET['task_id'])) and (isset($_GET['check']))){
+        if (setTaskStatus($link, $_GET['task_id'], $_GET['check']))
+        {
+            unset($_GET['task_id']);
+            unset($_GET['check']);
+            header('Location: /');
+        }
+    }
+
+    // Проверка запроса на показ выполненных задач
+    if (isset($_GET['show_completed'])){
+        $show_complete_tasks = $_GET['show_completed'];
+    }
+
+
+    //SQL-запрос для получения списка задач для выбранного проекта
+    $array_tasks = getTasks($link, $user_id, $show_complete_tasks, $current_project_id, $filter_task);
 
     // Валидация поля формы добавления проектов
     if (($_SERVER['REQUEST_METHOD'] == 'POST') and (isset($_POST['form_project']))) {
@@ -56,7 +110,7 @@ if (isset($_SESSION['username'])) {
     }
 
 
-// Валидация полей формы добавления задачи
+    // Валидация полей формы добавления задачи
     if (($_SERVER['REQUEST_METHOD'] == 'POST') and (isset($_POST['form_task']))) {
 
         // Валидация полей формы: имя, проект, дата
@@ -73,7 +127,7 @@ if (isset($_SESSION['username'])) {
                         break;
                     }
                 }
-                if (!$select_project_exist) $errors_form_task[$field] = 'Такого проекта не существует';
+                if (!$select_project_exist) $errors_form_task[$field] = 'Такого проекта не существует, создайте новый и выберите его';
                 $data_fields_form_task[$field] = $_POST[$field];
                 $data_fields_form_task['create_date'] = date('Y-m-d H:i:s');
             }
@@ -139,7 +193,9 @@ if (isset($_SESSION['username'])) {
 
     $page_content = include_template('templates/index.php', [
         'array_tasks' => $array_tasks,
-        'show_complete_tasks' => $show_complete_tasks
+        'show_complete_tasks' => $show_complete_tasks,
+        'filter_tasks' => $filter_tasks,
+        'filter_task' => $filter_task
     ]);
 
     $layout_content = include_template('templates/layout.php', [
@@ -158,13 +214,13 @@ if (isset($_SESSION['username'])) {
         'errors_form_auth' => $errors_form_auth,
         'data_user' => $data_user,
         'errors_form_project' => $errors_form_project,
-        'modal_project' => $modal_project
+        'modal_project' => $modal_project,
     ]);
     print($layout_content);
 
 }
 else {
-// Валидация полей формы авторизации пользователя
+    // Валидация полей формы авторизации пользователя
     if (($_SERVER['REQUEST_METHOD'] == 'POST') and (isset($_POST['form_auth']))) {
 
         $data_user = checkEmailUser($link, $_POST['email']);
@@ -172,10 +228,6 @@ else {
         if (count($data_user)) {
 
             $data_user_form_auth['email'] = $_POST['email'];
-           // $pass_hash = password_hash($_POST['password'], PASSWORD_DEFAULT);
-
-           // if ($data_user['password_user'] != $pass_hash) $errors_form_auth['password'] = 'Ваш пароль не совпадает, попробуйте еще раз';
-
             if (!password_verify($_POST['password'], $data_user['password_user'])) $errors_form_auth['password'] = 'Ваш пароль не совпадает, попробуйте еще раз';
 
         } else {
@@ -212,7 +264,8 @@ else {
 
     $page_content = include_template('templates/index.php', [
         'array_tasks' => $array_tasks,
-        'show_complete_tasks' => $show_complete_tasks
+        'show_complete_tasks' => $show_complete_tasks,
+        'filter_tasks' => $filter_tasks
     ]);
 
     $layout_content = include_template('templates/layout.php', [

@@ -1,6 +1,10 @@
 <?php
 require_once('init.php');
 
+if (($_SERVER['REQUEST_METHOD'] == 'POST') and (count($_POST) == 0)){
+    $errors_form_task['preview'] = "Размер файла превышает ограничения на сервере";
+}
+
 if (isset($_SESSION['username'])) {
     $data_user = $_SESSION['username'];
     $user_id = $data_user['id'];
@@ -52,7 +56,6 @@ if (isset($_SESSION['username'])) {
     if((isset($_SESSION['current_project_id'])) and (!isset($_GET['id']))){
         $current_project_id = $_SESSION['current_project_id'];
     }
-
 
     // Проверка переменной id
     if (isset($_GET['id'])) {
@@ -117,7 +120,6 @@ if (isset($_SESSION['username'])) {
             }
         }
     }
-
 
     // Валидация полей формы добавления задачи
     if (($_SERVER['REQUEST_METHOD'] == 'POST') and (isset($_POST['form_task']))) {

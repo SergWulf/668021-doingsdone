@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 
-<body><!--class="overlay"-->
+<body <?php if ($call_form_auth == 1): echo 'class="overlay"'; endif;?>><!--class="overlay"-->
 <h1 class="visually-hidden">Дела в порядке</h1>
 
 <div class="page-wrapper">
@@ -23,7 +23,7 @@
             <section class="content__side">
                 <p class="content__side-info">Если у вас уже есть аккаунт, авторизуйтесь на сайте</p>
 
-                <a class="button button--transparent content__side-button" href="#" >Войти</a>
+                <a class="button button--transparent content__side-button open-modal" href="javascript:;" target = "user_login">Войти</a>
             </section>
 
             <main class="content__main">
@@ -101,5 +101,8 @@
         </div>
     </div>
 </footer>
+<script src="flatpickr.js"></script>
+<script src="script.js"></script>
+<?=$modal_auth;?>
 </body>
 </html>

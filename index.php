@@ -18,7 +18,10 @@ $array_tasks = getTasksByUser($user_id, $link, $show_complete_tasks);
 //Подсчет количества задач для каждого проекта
 $count_projects_array = count_projects($user_id, $link);
 
-$page_content = include_template('templates/index.php', ['array_tasks' => $array_tasks]);
+$page_content = include_template('templates/index.php', [
+    'array_tasks' => $array_tasks,
+    'show_complete_tasks' => $show_complete_tasks
+]);
 $layout_content = include_template('templates/layout.php', [
     'title' => 'Дела в порядке',
     'name_user' => $name_user,

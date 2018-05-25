@@ -13,7 +13,7 @@ $name_user = $row_user['name_user'];
 $project_array = getProjectsByUserId(2, $link);
 
 //SQL-запрос для получения списка задач для выбранного проекта
-$array_tasks = getTasksByUser(2,$link);
+$array_tasks = getTasksByUser(2, $link, false);
 
 //Подсчет количества задач для каждого проекта
 $count_projects_array = count_projects(2, $link);

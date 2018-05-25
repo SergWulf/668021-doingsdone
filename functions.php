@@ -7,16 +7,15 @@ function count_projects(int $user_id, mysqli $link)
     $stmt = db_get_prepare_stmt($link, $sql_count_projects, [$user_id]);
     mysqli_stmt_execute($stmt);
     $mysqli_result = mysqli_stmt_get_result($stmt);
-    $cnt_projects = mysqli_fetch_all($mysqli_result, MYSQLI_ASSOC);
-    $cnt_rows_projects = mysqli_num_rows($mysqli_result);
-    $count_all_projects = 0;
-    foreach ($cnt_projects as $index => $values)
-    {
-        $count_all_projects = $cnt_projects[$index]['cnt'] + $count_all_projects;
+    $aggregated_projects = mysqli_fetch_all($mysqli_result, MYSQLI_ASSOC);
+    $result = [];
+    $count_all = 0;
+    foreach ($aggregated_projects as $project) {
+        $result[$project['project_id']] = (int)$project['cnt'];
+        $count_all += (int)$project['cnt'];
     }
-    $cnt_projects[$cnt_rows_projects]['project_id'] = 'project_all';
-    $cnt_projects[$cnt_rows_projects]['cnt'] = $count_all_projects;
-    return $cnt_projects;
+    $result[PROJECT_ALL] = $count_all;
+    return $result;
 }
 
 // Функция - шаблонизатор
@@ -71,10 +70,23 @@ function getProjectsByUserId(int $user_id, mysqli $link)
     return $projects;
 }
 
-function getTasksByUser(int $user_id, mysqli $link)
+function getTasksByUser(int $user_id, mysqli $link, bool $show_complete_tasks)
 {
-    $sql_tasks_user_id = 'SELECT * FROM tasks WHERE user_id = ?';
-    $stmt = db_get_prepare_stmt($link, $sql_tasks_user_id, [$user_id]);
+    $sql = 'SELECT * FROM tasks';
+    $where_clause = [];
+    $params = [];
+
+    $where_clause[] = 'user_id = ?';
+    $params[] = $user_id;
+
+    if (! $show_complete_tasks) {
+        $where_clause[] = 'status = false';
+    }
+
+    if (count($where_clause)) {
+        $sql = $sql . ' WHERE ' . implode(' AND ', $where_clause);
+    }
+    $stmt = db_get_prepare_stmt($link, $sql, $params);
     mysqli_stmt_execute($stmt);
     $mysqli_result = mysqli_stmt_get_result($stmt);
     $tasks = mysqli_fetch_all($mysqli_result, MYSQLI_ASSOC);

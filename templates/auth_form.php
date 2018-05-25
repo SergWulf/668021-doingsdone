@@ -1,4 +1,4 @@
-<div class="modal" <?=(count($errors_form_auth)?'':'hidden');?> id="user_login">
+<div class="modal" <?php if ((count($errors_form_auth)) or ($call_form_auth == 1)): echo ''; else: echo 'hidden'; endif;?>  id="user_login">
     <button class="modal__close" type="button" name="button">Закрыть</button>
 
     <h2 class="modal__heading">Вход на сайт</h2>

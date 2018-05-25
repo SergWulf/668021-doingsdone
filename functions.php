@@ -51,20 +51,6 @@ function task_important($task)
     return false;
 }
 
-/**
- * Функция показывающая задачи, срок которых истекает в текущий день
- */
-
-/**
- * Функция показывающая задачи, срок которых истекает в завтрашний день
- */
-
-/**
- * Функция показывающая задачи, срок выполнения которых истек
- */
-
-
-
 function getUserById(mysqli $link, int $user_id)
 {
     $sql_user_id = 'SELECT id, name_user  FROM users WHERE id = ?';
@@ -136,7 +122,7 @@ function getTasks(mysqli $link, int $user_id, bool $show_complete_tasks, int $pr
 
     if ($filter_task == 2) {
         /**
-         *  Запомнить завтрашний день и время 00:00:00
+         *  Запомнить сегодняшний день и время 23:59:59
          *  Запомнить завтрашний день и время 23:59:59
          *  Если в задаче поле limit_date_task попадает в промежуток, то записываем ее в массив
          */

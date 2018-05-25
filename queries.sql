@@ -17,6 +17,9 @@ INSERT INTO tasks SET user_id = 1 , project_id = 2, name_task = 'Сделать 
 INSERT INTO tasks SET user_id = 2 , project_id = 3, name_task = 'Встреча с другом', create_date_task = '2018-05-13 07:23:28', run_date_task = NULL, limit_date_task = '2018-05-18 10:13:39', file_task = '', status = FALSE;
 INSERT INTO tasks SET user_id = 2 , project_id = 1, name_task = 'Купить корм для кота', create_date_task = '2018-05-14 7:39:29', run_date_task = NULL, limit_date_task = '2018-5-21 23:22:19', file_task = '', status = FALSE;
 INSERT INTO tasks SET user_id = 3 , project_id = 4, name_task = 'Заказать пиццу', create_date_task = '2018-5-16 01:23:48', run_date_task = NULL, limit_date_task = '2018-05-19 21:17:42', file_task = '', status = FALSE;
+INSERT INTO tasks SET user_id = 2 , project_id = 3, name_task = 'Выполнить упражнение по математике', create_date_task = '2018-05-23 07:23:28', run_date_task = NULL, limit_date_task = '2018-05-25 10:23:39', file_task = '', status = FALSE;
+INSERT INTO tasks SET user_id = 2 , project_id = 3, name_task = 'Выполнить упражнение по тайм-менеджменту', create_date_task = '2018-05-25 07:33:28', run_date_task = '2018-05-25 14:33:28', limit_date_task = '2018-05-28 12:20:39', file_task = '', status = TRUE;
+INSERT INTO tasks SET user_id = 2 , project_id = 3, name_task = 'Выполнить упражнение по физкультуре', create_date_task = '2018-05-25 07:54:28', run_date_task = '2018-05-25 15:33:28', limit_date_task = '2018-05-28 12:20:39', file_task = '', status = TRUE;
 
 /*
  Запросы на отображение данных

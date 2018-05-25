@@ -23,15 +23,15 @@
 
 <table class="tasks">
     <?php foreach ($array_tasks as $index => $attributes_of_task): ?>
-        <tr class="tasks__item task  <?php if ($array_tasks[$index]['complete'] == "Да"): echo('task--completed '); endif; echo task_important($array_tasks[$index]) ? 'task--important' : ''; ?>">
+        <tr class="tasks__item task  <?php if ($array_tasks[$index]['status'] == 1): echo('task--completed '); endif; echo task_important($array_tasks[$index]) ? 'task--important' : ''; ?>">
             <td class="task__select">
                 <label class="checkbox task__checkbox">
                     <input class="checkbox__input visually-hidden task__checkbox" type="checkbox">
-                    <span class="checkbox__text"><?=strip_tags(($array_tasks[$index]['task'])); ?></span>
+                    <span class="checkbox__text"><?=strip_tags(($array_tasks[$index]['name_task'])); ?></span>
                 </label>
             </td>
             <td class="task__file"></td>
-            <td class="task__date"><?=strip_tags(($array_tasks[$index]['date'])); ?></td>
+            <td class="task__date"><?=strip_tags(($array_tasks[$index]['limit_date_task'])); ?></td>
         </tr>
     <?php endforeach; ?>
 </table>

@@ -1,6 +1,12 @@
 <?php
 require_once('init.php');
 
+// Переадресация на форму авторизации
+
+if ((isset($_GET['auth'])) and ($_GET['auth'] == 1)){
+    $call_form_auth = 1;
+}
+
 // Проверяем, что форма отправлена, проводим валидацию данных.
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {
@@ -31,16 +37,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
         // Функция добавления нового пользователя в БД (линк, массив с данными)
         If (addUser($link, $data_fields_form_register)){
-            header('Location: /');
+            header('Location: /register.php?auth=1');
         }
     }
 }
 
-
+$modal_auth = include_template('templates/auth_form.php',[
+    'errors_form_auth' => $errors_form_auth,
+    'data_user_form_auth' => $data_user_form_auth,
+    'call_form_auth' => $call_form_auth
+]);
 
 $register_form = include_template('templates/register.php',[
     'errors_form_register' => $errors_form_register,
     'data_fields_form_register' => $data_fields_form_register,
+    'modal_auth' => $modal_auth,
+    'data_user_form_auth' => $data_user_form_auth,
+    'errors_form_auth' => $errors_form_auth,
+    'call_form_auth' => $call_form_auth
 ]);
 
 print($register_form);

@@ -110,5 +110,6 @@
 
 <script src="flatpickr.js"></script>
 <script src="script.js"></script>
+<?=$modal_task;?>
 </body>
 </html>

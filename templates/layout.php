@@ -9,11 +9,12 @@
     <link rel="stylesheet" href="css/flatpickr.min.css">
 </head>
 
-<body <?php if (count($errors_form_task)): echo 'class="overlay"'; endif;?>><!--class="overlay"-->
+<body <?php if ((count($errors_form_task)) or (count($errors_form_auth)) ): echo 'class="overlay"'; endif;?>><!--class="overlay"-->
 <h1 class="visually-hidden">Дела в порядке</h1>
 
 <div class="page-wrapper">
     <div class="container container--with-sidebar">
+        <?php if (count($data_user)): ?>
         <header class="main-header">
             <a href="#">
                 <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
@@ -31,7 +32,7 @@
                     <div class="user-menu__data">
                         <p><?=$name_user;?></p>
 
-                        <a href="#">Выйти</a>
+                        <a href="logout.php">Выйти</a>
                     </div>
                 </div>
             </div>
@@ -65,6 +66,7 @@
             <?=$content;?>
             </main>
         </div>
+        <?php else: echo $guest;  endif; ?>
     </div>
 </div>
 
@@ -111,5 +113,6 @@
 <script src="flatpickr.js"></script>
 <script src="script.js"></script>
 <?=$modal_task;?>
+<?=$modal_auth;?>
 </body>
 </html>

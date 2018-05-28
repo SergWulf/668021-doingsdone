@@ -10,4 +10,9 @@ $errors_form_task = [];
 $data_fields_form_task = [];
 $errors_form_register = [];
 $data_fields_form_register = [];
+$errors_form_auth = [];
+$data_user_form_auth = [];
+$data_user = [];
+
+$count_projects_array = 0;
 ?>

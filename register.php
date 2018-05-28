@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         }
     }
 
-    if (!checkEmailUser($link, $data_fields_form_register['email'])) $errors_form_register['email'] = 'Такой email уже существует у другого пользователя';
+    if (checkEmailUser($link, $data_fields_form_register['email'])) $errors_form_register['email'] = 'Такой email уже существует у другого пользователя';
 
     // Если ошибок нету и email уникальный в БД, то добавляем нового пользователя в БД
     if (count($errors_form_register) == 0) {
@@ -33,8 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         If (addUser($link, $data_fields_form_register)){
             header('Location: /');
         }
-
-
     }
 }
 

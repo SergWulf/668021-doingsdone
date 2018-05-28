@@ -7,8 +7,8 @@
         <div class="form__row">
             <label class="form__label" for="name">Название <sup>*</sup></label>
 
-            <input class="form__input <?php if (isset($errors_form_task['name'])): echo 'form__input--error'; endif;?>"" type="text" name="name" id="name" value="<?php if (isset($data_fields_form_task['name'])): echo $data_fields_form_task['name']; endif;?>" placeholder="Введите название">
-            <?php if (isset($errors_form_task['name'])):  echo '<p class="form__message">'.$errors_form_task['name'].'</p>'; endif; ?>
+            <input class="form__input <?php if (isset($errors_form_task['name'])): echo 'form__input--error'; endif;?>" type="text" name="name" id="name" value="<?php if (isset($data_fields_form_task['name'])): echo $data_fields_form_task['name']; endif;?>" placeholder="Введите название">
+            <p class="form__message"><?php if (isset($errors_form_task['name'])):  echo $errors_form_task['name']; endif; ?></p>
         </div>
 
         <div class="form__row">
@@ -44,7 +44,7 @@
         </div>
 
         <div class="form__row form__row--controls">
-            <input class="button" type="submit" name="" value="Добавить">
+            <input class="button" type="submit" name="form_task" value="Добавить">
         </div>
     </form>
 </div>

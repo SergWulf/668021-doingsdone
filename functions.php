@@ -1,6 +1,7 @@
 <?php
 
 // Функция подсчета количества проектов
+
 function count_projects(mysqli $link, int $user_id)
 {
     $sql_count_projects = 'SELECT project_id, count(*) AS cnt FROM tasks WHERE user_id = ? GROUP BY project_id';
@@ -97,6 +98,23 @@ function getTasks(mysqli $link, int $user_id, bool $show_complete_tasks, int $pr
     $mysqli_result = mysqli_stmt_get_result($stmt);
     $tasks = mysqli_fetch_all($mysqli_result, MYSQLI_ASSOC);
     return $tasks;
+}
+
+function addProjectByUserId (mysqli $link, int $user_id, $data_task_project)
+{
+
+    // Извлекаем параметры из массива и подготавлиаваем их для запроса
+    $params = [];
+    $params[] = $user_id;
+    $params[] = $data_task_project['name'];
+
+
+    //Составляем SQL запрос
+    $sql = "INSERT INTO projects (`user_id`,`name_project`) VALUES (?, ?)";
+    $stmt = db_get_prepare_stmt($link, $sql, $params);
+    mysqli_stmt_execute($stmt);
+
+    return mysqli_insert_id($link);
 }
 
 function addTaskByUserId (mysqli $link, int $user_id, $data_task_form)

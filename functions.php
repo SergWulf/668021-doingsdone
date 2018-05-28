@@ -126,4 +126,36 @@ function validateDate($date)
     $d = DateTime::createFromFormat($format, $date);
     return $d && $d->format($format) == $date;
 }
+
+function addUser(mysqli $link, $data_register_form)
+{
+    $params = [];
+    $params[] = $data_register_form['name'];
+    $params[] = $data_register_form['email'];
+    $params[] = $data_register_form['password'];
+    $params[] = $data_register_form['date'];
+
+
+    $sql = "INSERT INTO users (`name_user`, `email_user`, `password_user`, `reg_date_user`, `contact_user`) VALUES (?, ?, ?, ?, null)";
+    $stmt = db_get_prepare_stmt($link, $sql, $params);
+    mysqli_stmt_execute($stmt);
+
+    return mysqli_insert_id($link);
+}
+
+function checkEmailUser(mysqli $link, $email_add_user)
+{
+    // Получить список пользователей
+    $sql = "SELECT `email_user` FROM users";
+    $mysqli_result = mysqli_query($link, $sql);
+    $array_email_users = mysqli_fetch_all($mysqli_result, MYSQLI_ASSOC);
+
+    // Сравнить адрес почты с каждым адресом почты пользователей
+    foreach($array_email_users as $email)
+    {
+        if ($email == $email_add_user) return false;
+    }
+
+    return true;
+}
 ?>
